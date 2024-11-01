@@ -20,4 +20,3 @@ that is exposed outside. Nginx acts as Web server and a browser will be used for
 Load-balancing functionality is added to nginx to distribute requests to all three incarnations of service1.
 The default round-robin algorithm is ok.
 Basic authentication is added to nginx and one user with password is initialized.
-
