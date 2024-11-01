@@ -2,7 +2,7 @@
 Implementation for course COMP.SE.140 exercise: "NGINX hands on"
 
 ## Instructions to run
-`git clone -b exercise4 <url>`
+`git clone -b exercise4 git@github.com:EeroSan/Nginx_SE140.git`
 
 `docker compose up –-build`
 
