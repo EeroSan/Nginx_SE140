@@ -7,6 +7,8 @@ Implementation for course COMP.SE.140 exercise: "NGINX hands on"
 `docker-compose up –-build`
 
 Open a browser with [localhost:8198/](http://localhost:8198/)
+>[!TIP]
+>Login credentials: username `harjoitusharri` password `Harrinsalasana123`
 
 `docker compose down` alternatively you can use STOP -button
 
