@@ -7,6 +7,8 @@ COPY ./shutdown.sh /home/shutdown.sh
 COPY ./run_shutdown_server.py /home/run_shutdown_server.py
 
 RUN chmod +x /home/shutdown.sh
+RUN dos2unix /home/shutdown.sh
+
 RUN apk add --no-cache python3
 
 # Run the custom Python server and start Nginx
