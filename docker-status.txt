@@ -1,0 +1,19 @@
+docker container ls
+CONTAINER ID   IMAGE                  COMMAND                  CREATED         STATUS              PORTS                            NAMES
+b27f988a5435   nginx_se140-nginx      "/docker-entrypoint.…"   4 minutes ago   Up About a minute   80/tcp, 0.0.0.0:8198->8198/tcp   nginx_se140-nginx-1   
+9a9289610177   nginx_se140-service2   "python app.py"          8 minutes ago   Up About a minute                                    nginx_se140-service2-1
+1129437590b8   nginx_se140-service1   "docker-entrypoint.s…"   8 minutes ago   Up About a minute                                    nginx_se140-service1-3
+37b8e5cca4ee   nginx_se140-service1   "docker-entrypoint.s…"   8 minutes ago   Up About a minute                                    nginx_se140-service1-2
+e6c21b60af46   nginx_se140-service1   "docker-entrypoint.s…"   8 minutes ago   Up About a minute                                    nginx_se140-service1-1
+
+
+docker network ls  
+NETWORK ID     NAME                                 DRIVER    SCOPE
+721af21d10dc   bridge                               bridge    local
+e073586228be   comp_se_140-docker-compose_backend   bridge    local
+cb877037bff8   dockerexcercise-se140_backend        bridge    local
+290b52887a83   host                                 host      local
+e168175bd5cd   muuta_mynetwork                      bridge    local
+d00557d0844a   nginx_se140_backend                  bridge    local
+23ff1a353b11   none                                 null      local
+f43a3f00cdf9   se200_e-commerce_ecommerce           bridge    local

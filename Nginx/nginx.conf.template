@@ -1,0 +1,63 @@
+events {
+    # Minimal configuration in events block to satisfy Nginx
+    worker_connections 1024;
+}
+
+http 
+{
+    error_log /var/log/nginx/error.log debug;
+    
+
+    upstream service1_backend {
+        server service1:8199;  
+    }
+    upstream service2_backend {
+        server service2:5000;  
+    }
+
+    server {
+
+        listen ${NGINX_PORT};
+
+        resolver 127.0.0.11 valid=5s;
+        include /etc/nginx/mime.types;
+
+        root /mysite/html/;
+
+        location /shutdowns1/ {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            proxy_pass http://service1_backend/shutdown;
+            access_log /var/log/nginx/shutdown.log;
+            
+        }
+        location /shutdowns2/ {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            proxy_pass http://service2_backend/shutdown/;
+
+            access_log /var/log/nginx/shutdown.log;
+            
+        }
+        location /shutdownself/ {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            proxy_pass http://localhost:9090/shutdown.sh;
+            access_log /var/log/nginx/shutdown.log;
+            
+        }
+        location /api/ {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            proxy_pass http://service1_backend/;
+            access_log /var/log/nginx/api.log;
+        }
+        location / {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+            try_files $uri $uri/ =404;
+            access_log /var/log/nginx/root.log;
+        }
+    }
+}
+

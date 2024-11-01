@@ -1,0 +1,36 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: ./Nginx
+    ports:
+      - 8198:8198
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - NGINX_PORT=8198
+    networks:
+      - backend
+    depends_on:
+      - service1
+  service1:
+    build:
+      context: ./Service1
+    environment:
+      - SLEEPSECONDS=10
+      - PORT=8199
+    deploy:
+      replicas: 3
+    networks:
+      - backend
+  service2:
+    build:
+      context: ./Service2
+    environment:
+      - PORT=5000
+    networks:
+      - backend
+    depends_on:
+      - service1  
+networks:
+  backend:
