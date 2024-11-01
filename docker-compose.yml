@@ -17,7 +17,7 @@ services:
     build:
       context: ./Service1
     environment:
-      - SLEEPSECONDS=10
+      - SLEEPSECONDS=2
       - PORT=8199
     deploy:
       replicas: 3
