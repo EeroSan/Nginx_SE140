@@ -1,0 +1,30 @@
+version: "3"
+services:
+  test_service1:
+    build:
+      context: .
+      dockerfile: ./Service1/Dockerfile.test
+    volumes:
+      - ./tests/service1_tests:/app/tests
+    environment:
+      - SLEEPSECONDS=2
+      - PORT=6000
+    networks:
+      - backend
+
+  test_service2:
+    build:
+      context: .
+      dockerfile: ./Service2/Dockerfile.test
+    volumes:
+      - ./tests:/app/tests
+    tmpfs:
+      - /app/tests/__pycache__
+    environment:
+      - PORT=7000
+    networks:
+      - backend
+  
+
+networks:
+  backend:

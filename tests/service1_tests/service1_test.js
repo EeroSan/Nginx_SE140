@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const controller = require('../src/controller'); // Import the entire module
+const controller = require('../app/src/controller'); // Import the entire module
 const { getIpAddress, getSystemInfo } = controller; // Destructure correctly from the imported module
 
 describe('Service1 Tests', () => {

@@ -40,8 +40,10 @@ services:
 
   test_service1:
     build:
-      context: ./Service1
-      dockerfile: Dockerfile.test
+      context: .
+      dockerfile: ./Service1/Dockerfile.test
+    volumes:
+      - ./tests/service1_tests:/app/tests
     environment:
       - SLEEPSECONDS=2
       - PORT=8199
@@ -52,8 +54,12 @@ services:
 
   test_service2:
     build:
-      context: ./Service2
-      dockerfile: Dockerfile.test
+      context: .
+      dockerfile: ./Service2/Dockerfile.test
+    volumes:
+      - ./tests:/app/tests
+    tmpfs:
+      - /app/tests/__pycache__
     environment:
       - PORT=5000
     networks:

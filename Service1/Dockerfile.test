@@ -1,10 +1,12 @@
 FROM node:21-slim
 
-WORKDIR ./Service1
+WORKDIR ./app
 
-COPY ./src/. ./src/
-COPY ./test/ ./test/
-COPY ./package.json ./package.json
+COPY ./Service1/. ./app/
+COPY ./tests/service1_tests/ /app/test/
+COPY ./Service1/package.json ./package.json
+
+
 
 ARG NODE_ENV
 RUN npm install;
