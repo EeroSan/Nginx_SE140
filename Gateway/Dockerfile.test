@@ -1,0 +1,16 @@
+FROM node:21-slim
+
+WORKDIR ./app
+
+COPY ./Gateway/. ./app/
+COPY ./tests/gateway_tests/ /app/test/
+COPY ./Gateway/package.json ./package.json
+
+
+
+ARG NODE_ENV
+RUN npm install;
+
+CMD ["npm", "run", "test"]
+
+
