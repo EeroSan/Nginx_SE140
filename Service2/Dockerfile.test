@@ -10,7 +10,7 @@ RUN pip install flask psutil pytest pytest-flask
 # CMD ["pytest"]
 
 ENV PYTHONPATH=/app
-CMD ["pytest", "/app/test/"]
+CMD ["pytest", "/app/Service2/"]
 # CMD ["pytest", "/app/tests/service2_tests"]
 # CMD ["sh", "-c", "ls -R /app/tests && pytest /app/tests/service2_tests"]
 
