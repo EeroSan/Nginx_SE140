@@ -17,7 +17,9 @@ services:
       context: .
       dockerfile: ./Service2/Dockerfile.test
     volumes:
-      - ./tests/service2_tests:/app/tests/service2_tests
+      - ${PROJECT_DIR:-.}/tests/service2_tests:/app/tests/service2_tests
+    # volumes:
+    #   - ./tests/service2_tests:/app/tests/service2_tests
     tmpfs:
       - /app/tests/__pycache__
     environment:
