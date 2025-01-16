@@ -4,7 +4,6 @@ WORKDIR /app
 COPY . /app
 # COPY ./tests/service2_tests/test_app.py /app/
 
-COPY ./tests/service2_tests /app/tests/service2_tests
 
 RUN pip install flask psutil pytest pytest-flask
 

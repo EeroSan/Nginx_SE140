@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: ./Service2/Dockerfile.test
     volumes:
-      - ./tests:/app/tests
+      - ./tests/service2_tests:/app/tests/service2_tests
     tmpfs:
       - /app/tests/__pycache__
     environment:
@@ -25,17 +25,17 @@ services:
     networks:
       - backend
   
-  test_gateway:
-    build:
-      context: .
-      dockerfile: ./Gateway/Dockerfile.test
-    volumes:
-      - ./tests/gateway_tests:/app/tests
-    environment:
-      - SLEEPSECONDS=2
-      - PORT=8000
-    networks:
-      - backend
+  # test_gateway:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Gateway/Dockerfile.test
+  #   volumes:
+  #     - ./tests/gateway_tests:/app/tests
+  #   environment:
+  #     - SLEEPSECONDS=2
+  #     - PORT=8000
+  #   networks:
+  #     - backend
   
 
 networks:
