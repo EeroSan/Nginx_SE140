@@ -4,12 +4,12 @@ WORKDIR /app
 COPY . /app
 # COPY ./tests/service2_tests/test_app.py /app/
 
-
+RUN ls -R /app
 RUN pip install flask psutil pytest pytest-flask
 
 # CMD ["pytest"]
 
 ENV PYTHONPATH=/app
-# CMD ["pytest", "/app/tests/service2_tests"]
-CMD ["sh", "-c", "ls -R /app/tests && pytest /app/tests/service2_tests"]
+CMD ["pytest", "/app/tests/service2_tests"]
+# CMD ["sh", "-c", "ls -R /app/tests && pytest /app/tests/service2_tests"]
 
