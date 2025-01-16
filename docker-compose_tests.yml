@@ -27,17 +27,17 @@ services:
     networks:
       - backend
   
-  # test_gateway:
-  #   build:
-  #     context: .
-  #     dockerfile: ./Gateway/Dockerfile.test
-  #   volumes:
-  #     - ./tests/gateway_tests:/app/tests
-  #   environment:
-  #     - SLEEPSECONDS=2
-  #     - PORT=8000
-  #   networks:
-  #     - backend
+  test_gateway:
+    build:
+      context: .
+      dockerfile: ./Gateway/Dockerfile.test
+    volumes:
+      - ./tests/gateway_tests:/app/tests
+    environment:
+      - SLEEPSECONDS=2
+      - PORT=8000
+    networks:
+      - backend
   
 
 networks:
