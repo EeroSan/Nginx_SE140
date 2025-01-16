@@ -2,7 +2,7 @@ FROM python:3.9-slim
 
 WORKDIR /app
 COPY . /app
-# COPY ./tests/service2_tests/test_app.py /app/
+COPY ./tests/service2_tests/ /app/test/
 
 RUN ls -R /app
 RUN pip install flask psutil pytest pytest-flask
@@ -10,6 +10,7 @@ RUN pip install flask psutil pytest pytest-flask
 # CMD ["pytest"]
 
 ENV PYTHONPATH=/app
-CMD ["pytest", "/app/tests/service2_tests"]
+CMD ["pytest", "/app/test/"]
+# CMD ["pytest", "/app/tests/service2_tests"]
 # CMD ["sh", "-c", "ls -R /app/tests && pytest /app/tests/service2_tests"]
 
