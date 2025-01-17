@@ -10,6 +10,7 @@ describe('API Gateway Tests', function () {
     before(function () {
       // Dynamically import the app for testing
       const gatewayPath = path.resolve(__dirname, '../src/gateway')
+      console.log("gatewayPath", gatewayPath);
       app = require(gatewayPath); // Adjust based on your app entry file
     });
 
