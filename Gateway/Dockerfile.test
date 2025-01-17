@@ -1,7 +1,7 @@
 FROM node:21-slim
 
-# Use an absolute path for WORKDIR
-WORKDIR /app
+# # Use an absolute path for WORKDIR
+# WORKDIR /app
 
 # Copy files to the correct structure
 COPY ./Gateway/package.json ./package.json
