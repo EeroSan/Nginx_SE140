@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { expect } = require('chai');
+const path = require('path');
 let app; // To hold the Express app
 
 // const controller = require('../app/src/controller'); // Import the entire module
@@ -8,7 +9,8 @@ let app; // To hold the Express app
 describe('API Gateway Tests', function () {
     before(function () {
       // Dynamically import the app for testing
-      app = require('../src/gateway'); // Adjust based on your app entry file
+      const gatewayPath = path.resolve(__dirname, '../src/gateway')
+      app = require(gatewayPath); // Adjust based on your app entry file
     });
 
   
