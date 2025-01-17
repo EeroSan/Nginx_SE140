@@ -8,7 +8,7 @@ let app; // To hold the Express app
 describe('API Gateway Tests', function () {
     before(function () {
       // Dynamically import the app for testing
-      app = require('../app'); // Adjust based on your app entry file
+      app = require('../app/src/gateway'); // Adjust based on your app entry file
     });
 
   
