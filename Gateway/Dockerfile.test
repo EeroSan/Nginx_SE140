@@ -1,16 +1,16 @@
 FROM node:21-slim
 
-WORKDIR ./app
+# Use an absolute path for WORKDIR
+WORKDIR /app
 
-COPY ./Gateway/. ./app/
-COPY ./tests/gateway_tests/ /app/test/
+# Copy files to the correct structure
 COPY ./Gateway/package.json ./package.json
+COPY ./Gateway/src ./src
+COPY ./tests/gateway_tests/ ./test/
 
-
-
+# Install dependencies
 ARG NODE_ENV
 RUN npm install;
 
+# Set the default command
 CMD ["npm", "run", "test"]
-
-
