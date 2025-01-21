@@ -23,27 +23,39 @@ describe('API Gateway Tests', function () {
     //PUT /state
     describe('PUT /state', function () {
       it('should update the state to INIT', async function () {
-        const res = await request(app).put('/state').send({ state: 'INIT' }).set('Accept', 'application/json');
-        expect(res.status).to.equal(200);
-        expect(res.body.state).to.equal('INIT');
+      const res = await request(app).put('/state')
+      .send("INIT")
+      .set('Content-Type', 'text/plain') // Explicitly set Content-Type
+      .set('Accept', 'text/plain');     // Ensure the response is plain text
+      expect(res.status).to.equal(200);
+      expect(res.text).to.equal('INIT');
       });
-  
+    
       it('should update the state to PAUSED', async function () {
-        const res = await request(app).put('/state').send({ state: 'PAUSED' }).set('Accept', 'application/json');
-        expect(res.status).to.equal(200);
-        expect(res.body.state).to.equal('PAUSED');
+      const res = await request(app).put('/state')
+      .send("PAUSED")
+      .set('Content-Type', 'text/plain')
+      .set('Accept', 'text/plain');
+      expect(res.status).to.equal(200);
+      expect(res.text).to.equal('PAUSED');
       });
-  
+    
       it('should update the state to RUNNING', async function () {
-        const res = await request(app).put('/state').send({ state: 'RUNNING' }).set('Accept', 'application/json');
-        expect(res.status).to.equal(200);
-        expect(res.body.state).to.equal('RUNNING');
+      const res = await request(app).put('/state')
+      .send("RUNNING")
+      .set('Content-Type', 'text/plain')
+      .set('Accept', 'text/plain');
+      expect(res.status).to.equal(200);
+      expect(res.text).to.equal('RUNNING');
       });
-  
+    
       it('should update the state to SHUTDOWN', async function () {
-        const res = await request(app).put('/state').send({ state: 'SHUTDOWN' }).set('Accept', 'application/json');
-        expect(res.status).to.equal(200);
-        expect(res.body.state).to.equal('SHUTDOWN');
+      const res = await request(app).put('/state')
+      .send("SHUTDOWN")
+      .set('Content-Type', 'text/plain')
+      .set('Accept', 'text/plain');
+      expect(res.status).to.equal(200);
+      expect(res.text).to.equal('SHUTDOWN');
       });
     });
     
