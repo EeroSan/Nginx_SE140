@@ -3,8 +3,6 @@ const { expect } = require('chai');
 const path = require('path');
 let app; // To hold the Express app
 
-// const controller = require('../app/src/controller'); // Import the entire module
-// const { getIpAddress, getSystemInfo } = controller; // Destructure correctly from the imported module
 
 describe('API Gateway Tests', function () {
     before(function () {
@@ -21,5 +19,34 @@ describe('API Gateway Tests', function () {
         expect(res.status).to.equal(200);
       });
     });
+
+    //PUT /state
+    describe('PUT /state', function () {
+      it('should update the state to INIT', async function () {
+        const res = await request(app).put('/state').send({ state: 'INIT' }).set('Accept', 'application/json');
+        expect(res.status).to.equal(200);
+        expect(res.body.state).to.equal('INIT');
+      });
+  
+      it('should update the state to PAUSED', async function () {
+        const res = await request(app).put('/state').send({ state: 'PAUSED' }).set('Accept', 'application/json');
+        expect(res.status).to.equal(200);
+        expect(res.body.state).to.equal('PAUSED');
+      });
+  
+      it('should update the state to RUNNING', async function () {
+        const res = await request(app).put('/state').send({ state: 'RUNNING' }).set('Accept', 'application/json');
+        expect(res.status).to.equal(200);
+        expect(res.body.state).to.equal('RUNNING');
+      });
+  
+      it('should update the state to SHUTDOWN', async function () {
+        const res = await request(app).put('/state').send({ state: 'SHUTDOWN' }).set('Accept', 'application/json');
+        expect(res.status).to.equal(200);
+        expect(res.body.state).to.equal('SHUTDOWN');
+      });
+    });
+    
+    
   
   });

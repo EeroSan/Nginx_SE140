@@ -6,10 +6,6 @@ const PORT = process.env.PORT || 8197
 
 app.use('/', routes);
 
-// app.get('/state', (req, res) => {
-//     res.status(200).send('Current state');
-// });
-
 if(process.env.RUN_TESTS === "NO")
 {
     app.listen(PORT, () => {
