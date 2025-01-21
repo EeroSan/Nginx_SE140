@@ -58,6 +58,18 @@ describe('API Gateway Tests', function () {
       expect(res.text).to.equal('SHUTDOWN');
       });
     });
+
+    // GET /request
+    describe('GET /request', function () {
+      it('should return request response', async function () {
+        const res = await request(app).get('/request')
+        .set('Accept', 'text/plain');
+        expect(res.status).to.equal(200);
+        expect(res.text).to.contain("service");
+
+      })
+
+    });
     
     
   
