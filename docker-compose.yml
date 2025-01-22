@@ -22,8 +22,8 @@ services:
     environment:
       - SLEEPSECONDS=2
       - PORT=8199
-    # deploy:
-    #   replicas: 3
+    deploy:
+      replicas: 3
     networks:
       - backend
 

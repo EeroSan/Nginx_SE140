@@ -26,11 +26,21 @@ exports.putState = (req, res) => {
 
 exports.getRequest = async (req, res) => {
     try {
-        const service1Response = await Promise.all([axios.get('http://service1/')]);
-        
+        //const service1Response = await Promise.all([axios.get('service1/:8199')]);
+        const service1Response = await fetch('http://service1:8199/');
+        if(service1Response.ok)
+        {
+            const responseBody = await service1Response.text();
         res.status(200).send(
-            `service1: ${service1Response.data}`
+            `service1: ${responseBody}`
         );
+
+        } else
+        {
+            res.status(500).send();
+        }
+
+        
     } catch (error) {
         console.error('Error fetching service data:', error.message);
         res.status(500).send('Failed to retrieve service information');

@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 
-exports.getIpAddress = () => {
+const getIpAddress = () => {
     const interfaces = os.networkInterfaces();
     for (const name of Object.keys(interfaces)) {
         for (const iface of interfaces[name]) {
@@ -15,7 +15,7 @@ exports.getIpAddress = () => {
     return 'IP address not found';
 };
 
-exports.getRunningProcesses = () => {
+const getRunningProcesses = () => {
     return new Promise((resolve, reject) => {
         const procDir = '/proc';
         let processes = [];
@@ -78,7 +78,7 @@ const getUptime = () => {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
 };
 
-exports.getSystemInfo = async () => {
+const getSystemInfo = async () => {
     try {
         const ipAddress = getIpAddress();
         const uptime = getUptime();
