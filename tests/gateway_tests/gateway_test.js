@@ -1,5 +1,6 @@
 const request = require('supertest');
 const { expect } = require('chai');
+const nock = require('nock');
 const path = require('path');
 let app; // To hold the Express app
 
@@ -11,6 +12,30 @@ describe('API Gateway Tests', function () {
       console.log("gatewayPath", gatewayPath);
       app = require(gatewayPath); // Adjust based on your app entry file
     });
+
+    beforeEach(function () {
+
+      const sysinfo = {ipAddress: "0.0.0.0",
+        uptime: "2h",
+        diskSpace: "2gb",
+        runningProcesses: "word"};
+      nock('http://service1')
+          .get('/')
+          .reply(200, 
+            { service: sysinfo, service2: sysinfo });
+
+      // nock('http://service2')
+      //     .get('/state')
+      //     .reply(200, { message: 'Service2 State' });
+
+      // nock('http://nginx')
+      //     .get('/health')
+      //     .reply(200, { status: 'healthy' });
+    });
+    afterEach(function () {
+      // Clean up nock after each test
+      nock.cleanAll();
+      });
 
   
     describe('GET /state', function () {

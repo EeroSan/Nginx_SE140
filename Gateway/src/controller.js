@@ -1,8 +1,4 @@
-// const os = require('os');
-// const fs = require('fs');
-// const path = require('path');
-// const { exec } = require('child_process');
-
+const axios = require('axios');
 
 exports.getState = (req, res) => {
     console.log('Attempting to get state');
@@ -24,3 +20,17 @@ exports.putState = (req, res) => {
         res.status(400).send();
     }
 };
+
+exports.getRequest = async (req, res) => {
+    try {
+        const service1Response = await Promise.all([axios.get('http://service1/')]);
+        
+        res.status(200).send(
+            `service1: ${service1Response.data}`
+        );
+    } catch (error) {
+        console.error('Error fetching service data:', error.message);
+        res.status(500).send('Failed to retrieve service information');
+    }
+
+}

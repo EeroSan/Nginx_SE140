@@ -8,5 +8,9 @@ router
 .put(controller.putState)
 ;
 
+router
+.route('/request')
+.get(controller.getRequest)
+;
 
 module.exports = router;
