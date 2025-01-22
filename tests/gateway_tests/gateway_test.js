@@ -93,9 +93,17 @@ describe('API Gateway Tests', function () {
         expect(res.text).to.contain("service");
 
       })
-
     });
-    
-    
+
+      // GET /run-log
+      describe('GET /run-log', function () {
+        it('should return run-log response', async function () {
+          const res = await request(app).get('/run-log')
+          .set('Accept', 'text/plain');
+          expect(res.status).to.equal(200);
+          expect(res.text).to.contain("INIT");
+  
+        })
+      });
   
   });
