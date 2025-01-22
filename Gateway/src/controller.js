@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 exports.getState = (req, res) => {
     console.log('Attempting to get state');
@@ -11,6 +13,7 @@ exports.putState = (req, res) => {
     const validStates = ['INIT', 'PAUSED', 'RUNNING', 'SHUTDOWN'];
     let newState = req.body;
     if(newState) newState= newState.trim();
+    appendToLog(`State changed to: ${newState}`);
 
     if (validStates.includes(newState)) {
         console.log(`State changed to: ${newState}`);
@@ -34,3 +37,36 @@ exports.getRequest = async (req, res) => {
     }
 
 }
+
+
+
+const logFilePath = path.join(__dirname, 'run-log.txt');
+
+const ensureLogFile = () => {
+    if (!fs.existsSync(logFilePath)) {
+        fs.writeFileSync(logFilePath, '');
+    } else {
+        try {
+            fs.accessSync(logFilePath, fs.constants.R_OK | fs.constants.W_OK);
+        } catch (err) {
+            fs.unlinkSync(logFilePath);
+            fs.writeFileSync(logFilePath, '2023-11-01T06.35:01.380Z: INIT->RUNNING');
+        }
+    }
+};
+
+const appendToLog = (message) => {
+    ensureLogFile();
+    fs.appendFileSync(logFilePath, `${new Date().toISOString()} - ${message}\n`);
+};
+
+exports.getRunLog = async (req, res) => {
+    ensureLogFile();
+    try {
+        const logData = fs.readFileSync(logFilePath, 'utf8');
+        res.status(200).send(logData);
+    } catch (error) {
+        console.error('Error reading log file:', error.message);
+        res.status(500).send('Failed to read log file');
+    }
+};

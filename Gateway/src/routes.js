@@ -13,4 +13,9 @@ router
 .get(controller.getRequest)
 ;
 
+router
+.route("/run-log")
+.get(controller.getRunLog)
+;
+
 module.exports = router;
