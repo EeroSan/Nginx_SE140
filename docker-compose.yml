@@ -53,5 +53,20 @@ services:
       - service1
       - service2
 
+  stateservice:
+    build:
+      context: .
+      dockerfile: ./StateService/Dockerfile.prod
+    environment:
+      - PORT=8196
+      - RUN_TESTS=NO
+    ports:
+      - "8195:8195"
+    networks:
+      - backend
+    depends_on:
+      - service1
+      - service2
+
 networks:
   backend:

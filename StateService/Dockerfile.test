@@ -1,0 +1,16 @@
+FROM node:21-slim
+
+# # Use an absolute path for WORKDIR
+# WORKDIR /app
+
+# Copy files to the correct structure
+COPY ./StateService/package.json ./package.json
+COPY ./StateService/src ./src
+COPY ./tests/stateservice_tests/ ./test/
+
+# Install dependencies
+ARG NODE_ENV
+RUN npm install;
+
+# Set the default command
+CMD ["npm", "run", "test"]

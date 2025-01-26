@@ -7,7 +7,6 @@ let app; // To hold the Express app
 
 describe('API Gateway Tests', function () {
     before(function () {
-      // Dynamically import the app for testing
       const gatewayPath = path.resolve(__dirname, '../src/gateway')
       console.log("gatewayPath", gatewayPath);
       app = require(gatewayPath); // Adjust based on your app entry file
@@ -19,23 +18,16 @@ describe('API Gateway Tests', function () {
         uptime: "2h",
         diskSpace: "2gb",
         runningProcesses: "word"};
-      nock('http://service1')
+        nock('http://service1:8199')
           .get('/')
           .reply(200, 
-            { service: sysinfo, service2: sysinfo });
-
-      // nock('http://service2')
-      //     .get('/state')
-      //     .reply(200, { message: 'Service2 State' });
-
-      // nock('http://nginx')
-      //     .get('/health')
-      //     .reply(200, { status: 'healthy' });
+          { service: sysinfo, service2: sysinfo });
     });
+
     afterEach(function () {
       // Clean up nock after each test
       nock.cleanAll();
-      });
+    });
 
   
     describe('GET /state', function () {
