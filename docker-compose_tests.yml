@@ -38,6 +38,18 @@ services:
     networks:
       - backend
   
+  test_stateservice:
+    build:
+      context: .
+      dockerfile: ./StateService/Dockerfile.test
+    volumes:
+      - ./tests/stateservice_tests:/app/tests
+    environment:
+      - PORT=9000
+      - RUN_TESTS=YES
+    networks:
+      - backend
+  
 
 networks:
   backend:
