@@ -1,5 +1,17 @@
 version: "3"
 services:
+  mongo: 
+    image: "mongo:7.0"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - mongodb:/data/db
+      - ./mongodb/log:/var/log/mongodb
+    command: ["mongod", "--logpath", "/var/log/mongodb/mongo.log", "--logappend"]
+    networks:
+      - backend
+
   nginx:
     build:
       context: ./Nginx
@@ -58,15 +70,24 @@ services:
       context: .
       dockerfile: ./StateService/Dockerfile.prod
     environment:
-      - PORT=8196
-      - RUN_TESTS=NO
-    ports:
-      - "8195:8195"
+      - PORT=8195
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_IP=${MONGO_IP}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+    # ports:
+    #   - "8195:8195"
     networks:
       - backend
     depends_on:
+      - mongo
       - service1
       - service2
-
+  
 networks:
   backend:
+
+volumes:
+  mongodb:
