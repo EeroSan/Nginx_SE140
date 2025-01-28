@@ -148,3 +148,7 @@ exports.shutdown = (req, res) => {
     process.exit(0);
 };
 
+module.exports = {
+    getIpAddress,
+  getSystemInfo
+}

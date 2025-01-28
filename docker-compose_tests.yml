@@ -33,8 +33,8 @@ services:
     volumes:
       - ./tests/gateway_tests:/app/tests
     environment:
+      - SLEEPSECONDS=2
       - PORT=8000
-      - RUN_TESTS=YES
     networks:
       - backend
   
@@ -45,8 +45,14 @@ services:
     volumes:
       - ./tests/stateservice_tests:/app/tests
     environment:
-      - PORT=9000
       - RUN_TESTS=YES
+      - PORT=8195
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_IP=${MONGO_IP}
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
     networks:
       - backend
   

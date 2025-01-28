@@ -13,4 +13,4 @@ ARG NODE_ENV
 RUN npm install;
 
 # Set the default command
-CMD ["npm", "run", "test"]
+CMD ["npm", "run", "test", "--exit"]

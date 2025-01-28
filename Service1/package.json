@@ -5,7 +5,8 @@
     "main": "service1.js",
     "scripts": {
       "start": "node src/service1.js",
-      "test": "mocha test --reporter mocha-junit-reporter --reporter-options mochaFile=./test-reports/test-results.xml"
+      "test": "mocha test"
+      
     },
     "author": "",
     "license": "ISC",
