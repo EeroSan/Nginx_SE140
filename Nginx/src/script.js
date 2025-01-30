@@ -27,14 +27,35 @@ async function delay(ms) {
 }
 
 async function sequentialShutdown() {
+
+    await shutDownGateway();
+    await delay(2000); // Wait 2 seconds
+
     await shutDownS2();
-    await delay(2000); // Wait 10 seconds
+    await delay(2000); // Wait 2 seconds
 
     await shutDownS1();
-    await delay(2000); // Wait 10 seconds
+    await delay(2000); // Wait 2 seconds
+    
+    
 
     await shutDownSelf();
 }
+
+
+async function shutDownGateway()
+{
+    try 
+    {
+        console.log('Sending request to /shutodwngateway');
+        await fetch('/shutdowngateway');
+
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+
+}
+
 
 async function shutDownS1()
 {

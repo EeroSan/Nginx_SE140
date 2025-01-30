@@ -16,4 +16,10 @@ router.route('/system-state')
 .put(controller.putSystemState)
 .get( controller.getSystemState);
 
+router.route('/shutdown').get((req, res) => {
+    console.log('Received shutdown request');
+    controller.shutdown(req, res);
+    
+});
+
 module.exports = router;

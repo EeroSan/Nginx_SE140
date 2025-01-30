@@ -22,4 +22,14 @@ router
 .get(controller.getRunLog)
 ;
 
+router
+.route("/shutdown")
+.get(controller.shutdownRemaining);
+
+// router.route('/shutdownAll').get((req, res) => {
+//     console.log('Received shutdown all request');
+//     controller.shutdownAll(req, res);
+    
+// });
+
 module.exports = router;

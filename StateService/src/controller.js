@@ -1,4 +1,6 @@
 const axios = require('axios');
+const mongoose = require('mongoose');
+const { MongoClient } = require('mongodb');
 const State = require('./models/State');
 const STATE_PUT_URL = 'http://gateway:8197/state';
 
@@ -108,4 +110,40 @@ exports.getSystemState = async (req, res) => {
     console.error(err);
     res.status(500).send({ message: "Internal server error." });
   }
+};
+
+const shutdownMongo = async () => {
+  try {
+    // MongoDB Admin credentials from your environment variables
+    const mongoAdminURI = `${process.env.MONGO_DB}://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_IP}:${process.env.MONGO_PORT}/admin?authSource=admin`;
+
+    const client = new MongoClient(mongoAdminURI);
+    await client.connect();
+    
+    // Run shutdown command on admin database
+    const adminDb = client.db().admin();
+    await adminDb.command({ shutdown: 1 });
+
+    console.log("MongoDB shutdown command issued successfully.");
+
+    // Close the Mongoose connection
+    await mongoose.connection.close();
+    console.log("Mongoose connection closed.");
+
+    res.status(200).send({ message: "MongoDB is shutting down." });
+
+    // Exit the Node.js process after a short delay to allow the response to be sent
+    setTimeout(() => process.exit(0), 500);
+
+  } catch (error) {
+    console.error("Error while shutting down MongoDB:", error);
+    res.status(500).send({ message: "Error shutting down MongoDB.", error: error.message });
+  }
+};
+
+exports.shutdown = async (req, res) => {
+  await shutdownMongo();
+  
+  console.log('Attempting to shut down system');
+  process.exit(0);
 };

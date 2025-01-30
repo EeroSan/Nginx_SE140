@@ -7,7 +7,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
     volumes:
       - mongodb:/data/db
-      - ./mongodb/log:/var/log/mongodb
     command: ["mongod", "--logpath", "/var/log/mongodb/mongo.log", "--logappend"]
     networks:
       - backend

@@ -33,10 +33,22 @@ if(process.env.RUN_TESTS === "NO")
     app.listen(PORT, () => {
       const initializeStates = async () => {
         try {
-          const state = await State.findOne();
+          let state = await State.findOne();
+          if(!state)
+          {
+            state = new State({
+              system_state: "INIT",
+              login_state: false
+            });
 
-          state.system_state = "INIT";
+          } else
+          {
+            state.system_state = "INIT";
           state.login_state = false;
+
+          }
+
+          
           await state.save();
           console.log("System state initialized to 'INIT'");
         } catch (error) {

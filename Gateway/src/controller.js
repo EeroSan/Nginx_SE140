@@ -1,4 +1,5 @@
 const axios = require('axios');
+const e = require('express');
 const fs = require('fs');
 const path = require('path');
 
@@ -86,8 +87,6 @@ exports.putState = async (req, res) => {
         if(response.data.login_state)
         {
             console.log("oldState:", oldState)
-            //console.log("response.data",response.data);
-            
             const validStates = ['INIT', 'PAUSED', 'RUNNING', 'SHUTDOWN'];
             let newState = req.body;
             if (newState && typeof newState === "string") {
@@ -116,6 +115,18 @@ exports.putState = async (req, res) => {
                     }
                     res.status(200).send(`${newState}`);
                 }
+                else if(newState === 'SHUTDOWN' )
+                {
+                    if(oldState === 'RUNNING' || oldState === 'PAUSED')
+                    {
+                        const responseOfPut =await axios.put(STATE_SERVICE_SYSTEM_URL, { system_state: 'SHUTDOWN' });
+                        shutdownAll();
+                    } else
+                    {
+                        res.status(418).send('System state is not RUNNING or PAUSED, not allowed to shutdown');
+                    }
+                    
+                }
                 axios.put(STATE_SERVICE_SYSTEM_URL, { system_state: newState })
                     .then(response => {
                         if (response.status === 200) {
@@ -139,10 +150,7 @@ exports.putState = async (req, res) => {
 
 exports.getRequest = async (req, res) => {
     try {
-        //const service1Response = await Promise.all([axios.get('service1/:8199')]);
-        //const service1Response = await fetch('http://service1:8199/');
         console.log("GET /request recieved");
-        // const service1Response = await fetch('http://nginx:8198/internal-service1/');
         const service1Response = await axios.get('http://nginx:8198/internal-service1/');
         console.log("service1Response: ", service1Response);
         if(service1Response.status === 200)
@@ -156,7 +164,6 @@ exports.getRequest = async (req, res) => {
         {
             console.log("System state is not INIT or RUNNING");
             res.status(418);
-
         }
         
         else
@@ -164,7 +171,6 @@ exports.getRequest = async (req, res) => {
             res.status(500).send();
         }
 
-        
     } catch (error) {
         console.error('Error fetching service data:', error.message);
         res.status(500).send('Failed to retrieve service information');
@@ -212,3 +218,84 @@ exports.getRunLog = async (req, res) => {
     }
     
 };
+
+exports.shutdownRemaining = async (req, res) => {
+    try {
+        console.log('Attempting to shut down system');
+        await shutdownStateService();
+        await delay(2000);
+        shutdown();
+
+    } catch (error) {
+        console.error('Error shutting down services:', error.message);
+    }
+};
+
+const shutdownAll = async () => {
+    try {
+        await shutdownNginxS1();
+        await delay(6000);
+        await shutdownNginxS2();
+        await delay(2000);
+        
+        await shutdownNginxSelf();
+        await delay(2000);
+
+        await shutdownStateService();
+        await delay(2000);
+        await shutdown();
+    } catch (error) {
+        console.error('Error shutting down services:', error.message);
+    }
+};
+
+async function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const shutdownStateService = async () => {
+    try {
+        await axios.get('http://stateservice:8195/shutdown');
+    } catch (error) {
+        console.error('Error shutting down services:', error.message);
+    }
+};
+
+const shutdownNginxSelf = async () => {
+    try {
+        await axios.get('http://nginx:8198/shutdownself/');
+    } catch (error) {
+        console.error('Error shutting down services:', error.message);
+    }
+}
+
+const shutdownNginxS2 = async () => {
+    try {
+        await axios.get('http://nginx:8198/shutdowns2/');
+    } catch (error) {
+        console.error('Error shutting down services:', error.message);
+    }
+}
+
+const shutdownNginxS1 = async () => {
+    try {
+        await axios.get('http://nginx:8198/shutdowns1/');
+        
+        } catch (error) {
+            console.error('Error shutting down services:', error.message);
+        }
+    }
+
+const shutdown = async (req, res) => {
+    try{
+        console.log('Attempting to shut down system');
+    process.exit(0);
+
+    } catch(error)
+    {
+        console.error('Error shutting down services:', error.message);
+    }
+    
+};
+
+// exports.shutdownAll = shutdownAll;
