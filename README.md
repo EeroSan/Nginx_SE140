@@ -25,3 +25,14 @@ Load-balancing functionality is added to nginx to distribute requests to all thr
 The default round-robin algorithm is ok.
 
 Basic authentication is added to nginx and one user with password is initialized.
+
+
+Required envionment variables
+
+MONGO_USER=placeholderuser
+MONGO_PASSWORD=placeholderpassword
+MONGO_IP=mongo
+MONGO_DB=placeholderdatabase
+MONGO_PORT=27017
+API_KEY=palaceholderapikey
+MONGO_COLLECTION=placeholdercollection
