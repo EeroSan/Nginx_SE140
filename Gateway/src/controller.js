@@ -114,7 +114,7 @@ exports.putState = async (req, res) => {
                     {
                         console.log("logged out");
                     }
-                    return;
+                    res.status(200).send(`${newState}`);
                 }
                 axios.put(STATE_SERVICE_SYSTEM_URL, { system_state: newState })
                     .then(response => {
@@ -142,7 +142,8 @@ exports.getRequest = async (req, res) => {
         //const service1Response = await Promise.all([axios.get('service1/:8199')]);
         //const service1Response = await fetch('http://service1:8199/');
         console.log("GET /request recieved");
-        const service1Response = await fetch('http://nginx:8198/internal-service1/');
+        // const service1Response = await fetch('http://nginx:8198/internal-service1/');
+        const service1Response = await axios.get('http://nginx:8198/internal-service1/');
         console.log("service1Response: ", service1Response);
         if(service1Response.status === 200)
         {
