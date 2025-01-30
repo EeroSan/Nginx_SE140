@@ -1,22 +1,15 @@
 events {
-    # Minimal configuration in events block to satisfy Nginx
     worker_connections 1024;
 }
 
-http 
-{
+http {
     error_log /var/log/nginx/error.log debug;
-    
 
-    upstream service1_backend {
-        server service1:8199;  
-    }
-    upstream service2_backend {
-        server service2:5000;  
-    }
+    upstream service1_backend { server service1:8199; }
+    upstream service2_backend { server service2:5000; }
+    upstream stateservice_backend { server stateservice:8195; }
 
     server {
-
         listen ${NGINX_PORT};
 
         resolver 127.0.0.11 valid=5s;
@@ -24,40 +17,49 @@ http
 
         root /mysite/html/;
 
-        location /shutdowns1/ {
-            auth_basic "Restricted Access";
-            auth_basic_user_file /etc/nginx/.htpasswd;
-            proxy_pass http://service1_backend/shutdown;
-            access_log /var/log/nginx/shutdown.log;
-            
+        # Middleware: Trigger login event
+        location = /trigger_login {
+            access_log /var/log/nginx/trigger_login.log;
+            internal;
+            proxy_pass http://stateservice_backend/login;
+            proxy_set_header Content-Type application/json;
+            proxy_set_header Content-Length 0;
+            proxy_method POST;
+            access_log /var/log/nginx/login.log;
         }
-        location /shutdowns2/ {
-            auth_basic "Restricted Access";
-            auth_basic_user_file /etc/nginx/.htpasswd;
-            proxy_pass http://service2_backend/shutdown/;
 
-            access_log /var/log/nginx/shutdown.log;
-            
-        }
-        location /shutdownself/ {
-            auth_basic "Restricted Access";
-            auth_basic_user_file /etc/nginx/.htpasswd;
-            proxy_pass http://localhost:9090/shutdown.sh;
-            access_log /var/log/nginx/shutdown.log;
-            
-        }
-        location /api/ {
-            auth_basic "Restricted Access";
-            auth_basic_user_file /etc/nginx/.htpasswd;
-            proxy_pass http://service1_backend/;
-            access_log /var/log/nginx/api.log;
-        }
+        # Serve main site
         location / {
             auth_basic "Restricted Access";
             auth_basic_user_file /etc/nginx/.htpasswd;
+            
+            auth_request /trigger_login;  # Trigger login event on successful authentication
+
+            index index.html;
             try_files $uri $uri/ =404;
             access_log /var/log/nginx/root.log;
         }
+
+        # Protect API endpoints
+        location /api/ {
+            auth_basic "Restricted Access";
+            auth_basic_user_file /etc/nginx/.htpasswd;
+
+            proxy_pass http://service1_backend/;
+            access_log /var/log/nginx/api.log;
+        }
+
+        # Internal access to Service1
+        location /internal-service1/ {
+            proxy_pass http://service1_backend/;
+            access_log /var/log/nginx/internal_service1.log;
+        }
+
+        # Logout: Notify StateService and block access
+        location /logout/ {
+            proxy_pass http://stateservice_backend/logout;
+            add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
+            return 401 "Please close your browser and re-open it.";
+        }
     }
 }
-

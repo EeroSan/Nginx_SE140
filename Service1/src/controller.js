@@ -115,7 +115,7 @@ const getService2Response = async () => {
     }
 };
 
-exports.getResponse = async (req, res) => {
+const getResponse = async (req, res) => {
 
     // res.status(200).send('Service1 is running');
     const sysInfo = await getSystemInfo();
@@ -134,7 +134,7 @@ exports.getResponse = async (req, res) => {
     
 };
 
-exports.sleepFor = (seconds) => {
+const sleepFor = (seconds) => {
     console.log(`Sleeping for ${seconds} seconds`);
     const end = Date.now() + seconds * 1000;
     while (Date.now() < end) {
@@ -143,12 +143,19 @@ exports.sleepFor = (seconds) => {
     console.log(`Waking up, sleep is over`);
 }
 
-exports.shutdown = (req, res) => {
+const shutdown = (req, res) => {
     console.log('Attempting to shut down system');
     process.exit(0);
 };
 
 module.exports = {
     getIpAddress,
-  getSystemInfo
+    getSystemInfo,
+    getResponse,
+    getRunningProcesses,
+    getDiskSpace,
+    getUptime,
+    getService2Response,
+    sleepFor,
+    shutdown
 }

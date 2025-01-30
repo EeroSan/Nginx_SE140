@@ -1,7 +1,10 @@
+const axios = require('axios');
 const State = require('./models/State');
+const STATE_PUT_URL = 'http://gateway:8197/state';
 
 // POST /login - Set login state to true
 exports.postLogin = async (req, res) => {
+  console.log("POST /login endpoint");
   try {
     const state = await State.findOne();
 
@@ -11,12 +14,43 @@ exports.postLogin = async (req, res) => {
 
     state.login_state = true;
     await state.save();
+    if(state.system_state === 'INIT')
+    {
+      const stateResponse = await axios.put(STATE_PUT_URL, 'RUNNING', {
+        headers: {
+        'Content-Type': 'text/plain'
+        }
+      });
+    }
+    
+
     res.status(200).send({ message: "Login state updated.", login_state: state.login_state });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error." });
   }
 };
+
+exports.postLogout = async (req, res) => 
+{
+  console.log("POST /logout endpoint")
+  try {
+    const state = await State.findOne();
+
+    if (!state) {
+      return res.status(404).send({ message: "State not initialized." });
+    }
+
+    state.login_state = false;
+    await state.save();
+    res.status(200).send({ message: "Login state updated.", login_state: state.login_state });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Internal server error." });
+  }
+  
+
+}
 
 // GET /login - Get the login state
 exports.getLogin = async (req, res) => {

@@ -9,6 +9,10 @@ router
 ;
 
 router
+.route('/loginstatus')
+.get(controller.getLoginStatus);
+
+router
 .route('/request')
 .get(controller.getRequest)
 ;

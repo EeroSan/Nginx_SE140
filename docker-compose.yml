@@ -24,6 +24,7 @@ services:
     networks:
       - backend
     depends_on:
+      - stateservice
       - service1
       - service2
 
@@ -77,14 +78,14 @@ services:
       - MONGO_DB=${MONGO_DB}
       - MONGO_PORT=${MONGO_PORT}
       - MONGO_COLLECTION=${MONGO_COLLECTION}
-    # ports:
-    #   - "8195:8195"
+      - RUN_TESTS=NO
+    ports:
+      - "8195"
     networks:
       - backend
     depends_on:
       - mongo
-      - service1
-      - service2
+      
   
 networks:
   backend:

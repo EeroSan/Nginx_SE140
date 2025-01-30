@@ -3,11 +3,17 @@ const router = express.Router();
 const controller = require('./controller');
 
 // Login state routes
-router.post("/login", controller.postLogin);
-router.get("/login", controller.getLogin);
+router.route('/login')
+.post(controller.postLogin)
+.get(controller.getLogin);
+
+router.route('/logout')
+.post(controller.postLogout)
+.get( controller.postLogout);
 
 // System state routes
-router.put("/system-state", controller.putSystemState);
-router.get("/system-state", controller.getSystemState);
+router.route('/system-state')
+.put(controller.putSystemState)
+.get( controller.getSystemState);
 
 module.exports = router;
