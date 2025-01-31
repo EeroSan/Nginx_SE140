@@ -153,21 +153,15 @@ exports.getRequest = async (req, res) => {
         console.log("GET /request recieved");
         const service1Response = await axios.get('http://nginx:8198/internal-service1/');
         console.log("service1Response: ", service1Response);
-        if(service1Response.status === 200)
-        {
-            const responseBody = await service1Response.text();
-        res.status(200).send(
-            `service1: ${responseBody}`
-        );
-
-        }else if(service1Response.status === 418) 
-        {
+        if (service1Response.status === 200) {
+            const responseBody = service1Response.data; // Use `.data` to access response body
+            res.status(200).send(
+                `service1: ${JSON.stringify(responseBody)}`
+            );
+        } else if (service1Response.status === 418) {
             console.log("System state is not INIT or RUNNING");
-            res.status(418);
-        }
-        
-        else
-        {
+            res.status(418).send();
+        } else {
             res.status(500).send();
         }
 
