@@ -102,6 +102,17 @@ describe('StateService API Tests', () => {
         .send({ system_state: 'INVALID_STATE' });
 
       expect(res).to.have.status(400);
+      expect(res.body).to.have.property('message', 'Invalid system state.'); // <-- Fixed assertion
+    });
+});
+
+    it('should return 400 for invalid system state', async () => {
+      const res = await chai
+        .request(app)
+        .put('/system-state')
+        .send({ system_state: 'INVALID_STATE' });
+
+      expect(res).to.have.status(400);
       expect(res.body).to.have.property('message', 'Invalid system_state.');
     });
 
