@@ -1,8 +1,8 @@
-const axios = require('axios');
-const mongoose = require('mongoose');
-const { MongoClient } = require('mongodb');
-const State = require('./models/State');
-const STATE_PUT_URL = 'http://gateway:8197/state';
+const axios = require("axios");
+const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
+const State = require("./models/State");
+const STATE_PUT_URL = "http://gateway:8197/state";
 
 // POST /login - Set login state to true
 exports.postLogin = async (req, res) => {
@@ -16,26 +16,28 @@ exports.postLogin = async (req, res) => {
 
     state.login_state = true;
     await state.save();
-    if(state.system_state === 'INIT')
-    {
-      const stateResponse = await axios.put(STATE_PUT_URL, 'RUNNING', {
+    if (state.system_state === "INIT") {
+      const stateResponse = await axios.put(STATE_PUT_URL, "RUNNING", {
         headers: {
-        'Content-Type': 'text/plain'
-        }
+          "Content-Type": "text/plain",
+        },
       });
     }
-    
 
-    res.status(200).send({ message: "Login state updated.", login_state: state.login_state });
+    res
+      .status(200)
+      .send({
+        message: "Login state updated.",
+        login_state: state.login_state,
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error." });
   }
 };
 
-exports.postLogout = async (req, res) => 
-{
-  console.log("POST /logout endpoint")
+exports.postLogout = async (req, res) => {
+  console.log("POST /logout endpoint");
   try {
     const state = await State.findOne();
 
@@ -45,14 +47,15 @@ exports.postLogout = async (req, res) =>
 
     state.login_state = false;
     await state.save();
-    res.status(200).send({ message: "Login state updated.", login_state: state.login_state });
+    res.status(200).send({
+      message: "Login state updated.",
+      login_state: state.login_state,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: "Internal server error." });
   }
-  
-
-}
+};
 
 // GET /login - Get the login state
 exports.getLogin = async (req, res) => {
@@ -74,11 +77,10 @@ exports.getLogin = async (req, res) => {
 exports.putSystemState = async (req, res) => {
   try {
     const { system_state } = req.body;
-
-    // Validate system_state
     const validStates = ["INIT", "PAUSED", "RUNNING", "SHUTDOWN", "FAILURE"];
+
     if (!validStates.includes(system_state)) {
-      return res.status(400).send({ message: "Invalid system_state." });
+      return res.status(400).send({ message: "Invalid system state." });
     }
 
     const state = await State.findOne();
@@ -89,10 +91,15 @@ exports.putSystemState = async (req, res) => {
 
     state.system_state = system_state;
     await state.save();
-    res.status(200).send({ message: "System state updated.", system_state: state.system_state });
+
+    console.log(`System state updated to ${system_state}`);
+
+    return res
+      .status(200)
+      .send({ message: "System state updated.", system_state });
   } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: "Internal server error." });
+    console.error("Error updating system state:", err.message);
+    return res.status(500).send({ message: "Internal server error." });
   }
 };
 
@@ -119,7 +126,7 @@ const shutdownMongo = async () => {
 
     const client = new MongoClient(mongoAdminURI);
     await client.connect();
-    
+
     // Run shutdown command on admin database
     const adminDb = client.db().admin();
     await adminDb.command({ shutdown: 1 });
@@ -134,16 +141,17 @@ const shutdownMongo = async () => {
 
     // Exit the Node.js process after a short delay to allow the response to be sent
     setTimeout(() => process.exit(0), 500);
-
   } catch (error) {
     console.error("Error while shutting down MongoDB:", error);
-    res.status(500).send({ message: "Error shutting down MongoDB.", error: error.message });
+    res
+      .status(500)
+      .send({ message: "Error shutting down MongoDB.", error: error.message });
   }
 };
 
 exports.shutdown = async (req, res) => {
   await shutdownMongo();
-  
-  console.log('Attempting to shut down system');
+
+  console.log("Attempting to shut down system");
   process.exit(0);
 };
